@@ -4,6 +4,7 @@ import { AppService } from "./app.service";
 import { DatabaseModule } from "./database/database.module";
 import { ConfigModule } from "@nestjs/config";
 import { environments } from "./common/environments";
+import { UsersModule } from './users/users.module';
 import config from "./config";
 import * as Joi from "joi";
 
@@ -19,6 +20,7 @@ import * as Joi from "joi";
       }),
     }),
     DatabaseModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
