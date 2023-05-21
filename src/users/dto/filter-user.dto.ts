@@ -10,7 +10,7 @@ export class FilterUsersDto {
   offset: number;
 
   @IsOptional()
-  firtsName: string;
+  firstName: string;
 
   @IsOptional()
   lastName: string;

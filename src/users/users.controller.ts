@@ -1,8 +1,9 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from "@nestjs/common";
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from "@nestjs/common";
 import { UsersService } from "./users.service";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { ApiTags } from "@nestjs/swagger";
+import { FilterUsersDto } from "./dto/filter-user.dto";
 
 @ApiTags("Users")
 @Controller("users")
@@ -10,13 +11,13 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post("create")
-  create(@Body() payload: CreateUserDto) {
-    return this.usersService.create(payload);
+  async create(@Body() payload: CreateUserDto) {
+    return await this.usersService.create(payload);
   }
 
-  @Get()
-  findAll() {
-    return this.usersService.findAll();
+  @Get("all")
+  async findAll(@Query() params?: FilterUsersDto) {
+    return await this.usersService.findAll(params);
   }
 
   @Get(":id")
