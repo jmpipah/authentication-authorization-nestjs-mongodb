@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { InjectModel } from "@nestjs/mongoose";
@@ -13,52 +13,59 @@ export class UsersService {
     try {
       const newRecord = new this.userModel(payload);
       return await newRecord.save();
-    } catch (error) {}
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 
   async findAll(params?: FilterUsersDto) {
     try {
       let filters: FilterQuery<User> = {};
       const { limit, offset, firstName, lastName } = params;
+
       if (params) {
         if (firstName) {
-          filters = {
-            firstName: {
-              $regex: firstName,
-              $options: "i",
-            },
-            ...filters,
+          filters.firstName = {
+            $regex: firstName,
+            $options: "i",
           };
         }
         if (lastName) {
-          filters = {
-            lastName: {
-              $regex: lastName,
-              $options: "i",
-            },
-            ...filters,
+          filters.lastName = {
+            $regex: lastName,
+            $options: "i",
           };
         }
       }
 
-      const records = await this.userModel
-        .find(filters)
-        .limit(limit)
-        .skip(offset * limit)
-        .exec();
-
-      const totalDocuments = await this.userModel.countDocuments(filters).exec();
+      const [records, totalDocuments] = await Promise.all([
+        this.userModel
+          .find(filters)
+          .limit(limit)
+          .skip(offset || 0 * limit || 0)
+          .exec(),
+        this.userModel.countDocuments(filters).exec(),
+      ]);
 
       return {
         records,
         totalDocuments,
       };
-    } catch (error) {}
-    return await this.userModel.find().exec();
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findOne(id: string): Promise<User> {
+    try {
+      const record = await this.userModel.findById(id.trim()).exec();
+      if (!record) {
+        throw new NotFoundException("Registro no encontrado");
+      }
+      return record;
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {
