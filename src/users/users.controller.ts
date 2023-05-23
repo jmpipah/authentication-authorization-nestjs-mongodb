@@ -25,13 +25,20 @@ export class UsersController {
     return await this.usersService.findOne(id);
   }
 
-  @Patch(":id")
-  update(@Param("id") id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(+id, updateUserDto);
+  @Patch("update/:id")
+  update(@Param("id") id: string, @Body() payload: UpdateUserDto) {
+    return this.usersService.update(id, payload);
   }
 
-  @Delete(":id")
-  delete(@Param("id") id: string) {
-    return this.usersService.delete(+id);
+  /** Eliminacion logica de una coleccion */
+  @Patch("delete/:id")
+  async delete(@Param("id") id: string) {
+    return await this.usersService.delete(id);
+  }
+
+  /** Eliminacion fiksica de una coleccion */
+  @Delete("remove/:id")
+  async remove(@Param("id") id: string) {
+    return await this.usersService.remove(id);
   }
 }

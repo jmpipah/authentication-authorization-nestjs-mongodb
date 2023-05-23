@@ -20,7 +20,7 @@ export class UsersService {
 
   async findAll(params?: FilterUsersDto) {
     try {
-      let filters: FilterQuery<User> = {};
+      const filters: FilterQuery<User> = { isDeleted: false };
       const { limit, offset, firstName, lastName } = params;
 
       if (params) {
@@ -58,21 +58,43 @@ export class UsersService {
 
   async findOne(id: string): Promise<User> {
     try {
+      /** Buscamos la coleccion por el ID */
       const record = await this.userModel.findById(id.trim()).exec();
+
+      /** Preguntamos si la coleccion no esta eliminada (logico) */
+      if (record.isDeleted) {
+        throw new NotFoundException("Registro no encontrado");
+      }
+
+      /** Si la coleccion no existe */
       if (!record) {
         throw new NotFoundException("Registro no encontrado");
       }
+
       return record;
     } catch (error) {
       throw new BadRequestException(error.message);
     }
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(id: string, payload: UpdateUserDto) {
+    try {
+      const record = await this.findOne(id);
+
+      return await this.userModel.findByIdAndUpdate(record.id, { $set: payload }, { new: true, runValidators: true }).exec();
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 
-  delete(id: number) {
-    return `This action removes a #${id} user`;
+  async delete(id: string) {
+    const record = await this.findOne(id);
+
+    return await this.userModel.findByIdAndUpdate(record.id, { $set: { isDeleted: !record.isDeleted } }, { new: true, runValidators: true }).exec();
+  }
+
+  async remove(id: string) {
+    const record = await this.findOne(id);
+    return await this.userModel.findByIdAndRemove(id).exec();
   }
 }

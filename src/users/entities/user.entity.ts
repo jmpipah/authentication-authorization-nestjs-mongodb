@@ -14,6 +14,9 @@ export class User extends Document {
 
   @Prop({ trim: true })
   lastName: string;
+
+  @Prop({ default: false })
+  isDeleted: boolean;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
