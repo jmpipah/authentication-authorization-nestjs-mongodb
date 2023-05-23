@@ -4,6 +4,7 @@ import { CreateUserDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { ApiTags } from "@nestjs/swagger";
 import { FilterUsersDto } from "./dto/filter-user.dto";
+import { MongoIdPipe } from "src/common/pipes/mongo-id.pipe";
 
 @ApiTags("Users")
 @Controller("users")
@@ -21,24 +22,22 @@ export class UsersController {
   }
 
   @Get("one/:id")
-  async findOne(@Param("id") id: string) {
+  async findOne(@Param("id", MongoIdPipe) id: string) {
     return await this.usersService.findOne(id);
   }
 
   @Patch("update/:id")
-  update(@Param("id") id: string, @Body() payload: UpdateUserDto) {
+  update(@Param("id", MongoIdPipe) id: string, @Body() payload: UpdateUserDto) {
     return this.usersService.update(id, payload);
   }
 
-  /** Eliminacion logica de una coleccion */
   @Patch("delete/:id")
-  async delete(@Param("id") id: string) {
+  async delete(@Param("id", MongoIdPipe) id: string) {
     return await this.usersService.delete(id);
   }
 
-  /** Eliminacion fiksica de una coleccion */
   @Delete("remove/:id")
-  async remove(@Param("id") id: string) {
+  async remove(@Param("id", MongoIdPipe) id: string) {
     return await this.usersService.remove(id);
   }
 }
