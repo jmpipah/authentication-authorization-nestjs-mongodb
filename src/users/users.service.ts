@@ -6,10 +6,12 @@ import { User } from "./entities/user.entity";
 import { FilterQuery, Model } from "mongoose";
 import { FilterUsersDto } from "./dto/filter-user.dto";
 import { HashingService } from "src/providers/hashing/hashing.service";
+import { ErrorService } from "src/errors/error.service";
+import { ErrorLoggerService } from "src/errors/error-logger.service";
 
 @Injectable()
 export class UsersService {
-  constructor(@InjectModel(User.name) private readonly userModel: Model<User>, private readonly hashingService: HashingService) {}
+  constructor(@InjectModel(User.name) private readonly userModel: Model<User>, private readonly hashingService: HashingService, private readonly errorService: ErrorService) {}
 
   /** Creamos un registro */
   async create(payload: CreateUserDto) {
@@ -19,7 +21,8 @@ export class UsersService {
       const newRecord = new this.userModel(payload);
       return await newRecord.save();
     } catch (error) {
-      throw new BadRequestException(error.message);
+      /** Creamos el error personalizado */
+      this.errorService.createError(error);
     }
   }
 
@@ -61,7 +64,8 @@ export class UsersService {
         totalDocuments,
       };
     } catch (error) {
-      throw new BadRequestException(error.message);
+      /** Creamos el error personalizado */
+      this.errorService.createError(error);
     }
   }
 
@@ -83,7 +87,8 @@ export class UsersService {
 
       return record;
     } catch (error) {
-      throw new BadRequestException(error.message);
+      /** Creamos el error personalizado */
+      this.errorService.createError(error);
     }
   }
 
@@ -95,21 +100,31 @@ export class UsersService {
       payload.password = await this.hashingService.hash(payload.password.trim());
       return await this.userModel.findByIdAndUpdate(record.id, { $set: payload }, { new: true, runValidators: true }).exec();
     } catch (error) {
-      throw new BadRequestException(error.message);
+      /** Creamos el error personalizado */
+      this.errorService.createError(error);
     }
   }
 
   /** Eliminacion lógica de un registro */
   async delete(id: string) {
-    const record = await this.findOne(id);
+    try {
+      const record = await this.findOne(id);
 
-    return await this.userModel.findByIdAndUpdate(record.id, { $set: { isDeleted: !record.isDeleted } }, { new: true, runValidators: true }).exec();
+      return await this.userModel.findByIdAndUpdate(record.id, { $set: { isDeleted: !record.isDeleted } }, { new: true, runValidators: true }).exec();
+    } catch (error) {
+      /** Creamos el error personalizado */
+      this.errorService.createError(error);
+    }
   }
 
   /** Eliminacion física de un registro */
   async remove(id: string) {
-    await this.findOne(id);
-
-    return await this.userModel.findByIdAndRemove(id).exec();
+    try {
+      await this.findOne(id);
+      return await this.userModel.findByIdAndRemove(id).exec();
+    } catch (error) {
+      /** Creamos el error personalizado */
+      this.errorService.createError(error);
+    }
   }
 }

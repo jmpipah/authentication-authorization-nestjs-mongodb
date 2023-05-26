@@ -26,11 +26,3 @@ UserSchema.methods.toJSON = function () {
 
   return record;
 };
-
-UserSchema.post("save", function (error, doc, next) {
-  if (error.name === "MongoServerError" && error.code === 11000) {
-    next(new Error(`El ${Object.keys(error.keyValue)} ya existe`));
-  } else {
-    next();
-  }
-});
