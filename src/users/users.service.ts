@@ -7,12 +7,10 @@ import { FilterQuery, Model } from "mongoose";
 import { FilterUsersDto } from "./dto/filter-user.dto";
 import { HashingService } from "src/providers/hashing/hashing.service";
 import { ErrorService } from "src/errors/error.service";
-import { ErrorLoggerService } from "src/errors/error-logger.service";
 
 @Injectable()
 export class UsersService {
   constructor(@InjectModel(User.name) private readonly userModel: Model<User>, private readonly hashingService: HashingService, private readonly errorService: ErrorService) {}
-
   /** Creamos un registro */
   async create(payload: CreateUserDto) {
     try {
