@@ -13,7 +13,7 @@ export class ErrorService {
       throw new BadRequestException(`El ${Object.keys(error.keyValue)} ya existe`);
     } else {
       /** Mensaje de error por defecto */
-      throw new InternalServerErrorException(error.message);
+      throw new BadRequestException(error.message);
     }
   }
 }

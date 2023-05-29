@@ -9,7 +9,8 @@ import { HashingService } from "src/providers/hashing/hashing.service";
 @Injectable()
 export class AuthenticationCommonService {
   constructor(@InjectModel(User.name) private readonly userModel: Model<User>, private readonly errorService: ErrorService, private readonly hashinService: HashingService) {}
-  async findUserAuthenticated(payload: SignInDto) {
+  /** Login de usuario, usado en el local strategy */
+  async findUserToAuthenticate(payload: SignInDto) {
     try {
       /** Buscamos los datos del usuario */
       const user = await this.userModel.findOne({ email: payload.email.trim() }).exec();

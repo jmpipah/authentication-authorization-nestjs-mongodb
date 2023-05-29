@@ -5,6 +5,7 @@ import { User, UserSchema } from "src/users/entities/user.entity";
 import { HashingService } from "src/providers/hashing/hashing.service";
 import { BcryptService } from "src/providers/hashing/bcrypt.service";
 import { ErrorsModule } from "src/errors/errors.module";
+import { LocalStrategy } from "./authentication/strategies/local.strategy";
 
 @Module({
   imports: [
@@ -16,7 +17,7 @@ import { ErrorsModule } from "src/errors/errors.module";
       },
     ]),
   ],
-  providers: [{ provide: HashingService, useClass: BcryptService }, AuthenticationCommonService],
+  providers: [{ provide: HashingService, useClass: BcryptService }, AuthenticationCommonService, LocalStrategy],
   controllers: [AuthenticationController],
 
   exports: [],
