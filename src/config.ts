@@ -11,5 +11,12 @@ export default registerAs("config", () => {
       connection: process.env.DB_CONNECTION,
       params: process.env?.PARAMS,
     },
+    session: {
+      accessToken: process.env.ACCESS_TOKEN,
+      jwtAccessTokenSecret: process.env.JWT_ACCESS_SECRET,
+      jwtAccessTokenExpiresTime: process.env.JWT_ACCESS_EXPIRES_TIME,
+      jwtRefreshTokenSecret: process.env.JWT_REFRESH_SECRET,
+      jwtRefreshTokenExpiresTime: process.env.JWT_REFRESH_EXPIRES_TIME,
+    },
   };
 });

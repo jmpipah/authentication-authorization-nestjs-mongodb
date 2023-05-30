@@ -1,12 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from "@nestjs/common";
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseGuards } from "@nestjs/common";
 import { UsersService } from "./users.service";
-import { CreateUserDto } from "./dto/create-user.dto";
-import { UpdateUserDto } from "./dto/update-user.dto";
 import { ApiTags } from "@nestjs/swagger";
-import { FilterUsersDto } from "./dto/filter-user.dto";
+
 import { MongoIdPipe } from "src/common/pipes/mongo-id.pipe";
+import { CreateUserDto, FilterUsersDto, UpdateUserDto } from "./dto";
+import { JwtAuthAccessGuard } from "src/iam/guards/jwt-auth-access.guard";
 
 @ApiTags("Users")
+@UseGuards(JwtAuthAccessGuard)
 @Controller("users")
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
