@@ -5,7 +5,7 @@ import { ExtractJwt, Strategy } from "passport-jwt";
 import config from "src/config";
 import { PayloadToken } from "../models/token.model";
 
-Injectable();
+@Injectable()
 export class JwtAccessTokenStrategy extends PassportStrategy(Strategy, "jwt-access") {
   constructor(@Inject(config.KEY) configService: ConfigType<typeof config>) {
     super({
@@ -15,6 +15,7 @@ export class JwtAccessTokenStrategy extends PassportStrategy(Strategy, "jwt-acce
     });
   }
   async validate(payload: PayloadToken) {
+    console.log(payload);
     return payload;
   }
 }

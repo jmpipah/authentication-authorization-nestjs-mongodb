@@ -20,7 +20,13 @@ async function bootstrap() {
   );
 
   /** Configuracion para la documentacion con Swagger */
-  const config = new DocumentBuilder().setTitle("APIREST AUTHC Y AUTHZ").setDescription("Autenticación y Autorización con NestJS y MongoDB").setVersion("1.0").build();
+  const config = new DocumentBuilder()
+    .setTitle("APIREST AUTHC Y AUTHZ")
+    .setDescription("Autenticación y Autorización con NestJS y MongoDB")
+    .setVersion("1.0")
+    .addTag("Auth", "Endpoints relacionados con la autenticación Auth")
+    .addTag("Users", "Endpoints relacionados con la autenticación User")
+    .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup("docs", app, document);
 

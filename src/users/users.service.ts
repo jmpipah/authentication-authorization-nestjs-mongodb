@@ -7,17 +7,30 @@ import { FilterQuery, Model } from "mongoose";
 import { FilterUsersDto } from "./dto/filter-user.dto";
 import { HashingService } from "src/providers/hashing/hashing.service";
 import { ErrorService } from "src/errors/error.service";
+import { ApiKeyService } from "src/api-key/api-key.service";
 
 @Injectable()
 export class UsersService {
-  constructor(@InjectModel(User.name) private readonly userModel: Model<User>, private readonly hashingService: HashingService, private readonly errorService: ErrorService) {}
+  constructor(
+    @InjectModel(User.name) private readonly userModel: Model<User>,
+    private readonly hashingService: HashingService,
+    private readonly errorService: ErrorService,
+    private readonly apiKeyService: ApiKeyService,
+  ) {}
   /** Creamos un registro */
   async create(payload: CreateUserDto) {
     try {
       /** Hasheamos la contraseña */
       payload.password = await this.hashingService.hash(payload.password.trim());
       const newRecord = new this.userModel(payload);
-      return await newRecord.save();
+      const hashedKey = await this.apiKeyService.createAndHash(newRecord.id);
+
+      const record = await newRecord.save();
+
+      return {
+        ...record.toObject(),
+        apiKey: hashedKey,
+      };
     } catch (error) {
       /** Creamos el error personalizado */
       this.errorService.createError(error);

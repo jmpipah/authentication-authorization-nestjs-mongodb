@@ -5,7 +5,6 @@ import { LocalAuthGuard } from "../guards/local-auth.guard";
 import { User } from "src/users/entities/user.entity";
 import { AuthenticationService } from "./authentication.service";
 import { JwtAuthRefreshGuard } from "../guards/jwt-auth-refresh.guard";
-import { ref } from "joi";
 
 @ApiTags("Auth")
 @Controller("authentication")

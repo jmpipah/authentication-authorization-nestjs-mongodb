@@ -1,10 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseGuards } from "@nestjs/common";
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseGuards, SetMetadata } from "@nestjs/common";
 import { UsersService } from "./users.service";
 import { ApiTags } from "@nestjs/swagger";
 
 import { MongoIdPipe } from "src/common/pipes/mongo-id.pipe";
 import { CreateUserDto, FilterUsersDto, UpdateUserDto } from "./dto";
 import { JwtAuthAccessGuard } from "src/iam/guards/jwt-auth-access.guard";
+import { IsPublic } from "src/iam/decorators/is-public.decorator";
+import { ApiKeyIsRequired } from "src/api-key/decorators/api-key.decorator";
 
 @ApiTags("Users")
 @UseGuards(JwtAuthAccessGuard)
@@ -17,6 +19,8 @@ export class UsersController {
     return await this.usersService.create(payload);
   }
 
+  // @IsPublic()
+  @ApiKeyIsRequired()
   @Get("all")
   async findAll(@Query() params?: FilterUsersDto) {
     return await this.usersService.findAll(params);

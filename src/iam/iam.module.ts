@@ -5,13 +5,11 @@ import { User, UserSchema } from "src/users/entities/user.entity";
 import { HashingService } from "src/providers/hashing/hashing.service";
 import { BcryptService } from "src/providers/hashing/bcrypt.service";
 import { ErrorsModule } from "src/errors/errors.module";
-import { LocalStrategy } from "./strategies/local.strategy";
 import { JwtModule } from "@nestjs/jwt";
 import { ConfigModule, ConfigType } from "@nestjs/config";
 import config from "src/config";
-import { JwtAccessTokenStrategy } from "./strategies/jwt-auth-access.strategy";
 import { AuthenticationService } from "./authentication/authentication.service";
-import { JwtRefreshTokenStrategy } from "./strategies/jwt-auth-refresh.strategy ";
+import { JwtAccessTokenStrategy, JwtRefreshTokenStrategy, LocalStrategy } from "./strategies";
 
 @Module({
   imports: [

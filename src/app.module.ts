@@ -4,9 +4,10 @@ import { AppService } from "./app.service";
 import { DatabaseModule } from "./database/database.module";
 import { ConfigModule } from "@nestjs/config";
 import { environments } from "./common/environments";
-import { UsersModule } from './users/users.module';
-import { ErrorsModule } from './errors/errors.module';
-import { IamModule } from './iam/iam.module';
+import { UsersModule } from "./users/users.module";
+import { ErrorsModule } from "./errors/errors.module";
+import { IamModule } from "./iam/iam.module";
+import { ApiKeyModule } from './api-key/api-key.module';
 import config from "./config";
 import * as Joi from "joi";
 
@@ -25,6 +26,7 @@ import * as Joi from "joi";
     UsersModule,
     ErrorsModule,
     IamModule,
+    ApiKeyModule,
   ],
   controllers: [AppController],
   providers: [AppService],
