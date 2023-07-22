@@ -28,5 +28,13 @@ export class CreateUserDto {
 
   @IsOptional()
   @ApiProperty()
+  readonly isTfaEnabled: boolean;
+
+  @IsOptional()
+  @ApiProperty()
+  readonly tfaSecret: string;
+
+  @IsOptional()
+  @ApiProperty()
   readonly isDeleted: boolean;
 }

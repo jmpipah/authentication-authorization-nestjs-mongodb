@@ -16,13 +16,19 @@ export class User extends Document {
   lastName: string;
 
   @Prop({ default: false })
+  isTfaEnabled: boolean;
+
+  @Prop({ trim: true })
+  tfaSecret: string;
+
+  @Prop({ default: false })
   isDeleted: boolean;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
 
 UserSchema.methods.toJSON = function () {
-  const { __v, password, ...record } = this.toObject();
+  const { __v, password, isTfaEabled, tfaSecret, ...record } = this.toObject();
 
   return record;
 };

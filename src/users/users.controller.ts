@@ -20,7 +20,7 @@ export class UsersController {
   }
 
   // @IsPublic()
-  @ApiKeyIsRequired()
+  //@ApiKeyIsRequired()
   @Get("all")
   async findAll(@Query() params?: FilterUsersDto) {
     return await this.usersService.findAll(params);

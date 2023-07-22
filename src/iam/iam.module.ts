@@ -10,6 +10,10 @@ import { ConfigModule, ConfigType } from "@nestjs/config";
 import config from "src/config";
 import { AuthenticationService } from "./authentication/authentication.service";
 import { JwtAccessTokenStrategy, JwtRefreshTokenStrategy, LocalStrategy } from "./strategies";
+import { OtpAuthenticationService } from "./authentication/otp-authentication.service";
+import { UsersService } from "src/users/users.service";
+import { ApiKeyService } from "src/api-key/api-key.service";
+import { ApiKey, ApiKeySchema } from "src/api-key/entities/api-key.entity";
 
 @Module({
   imports: [
@@ -18,6 +22,10 @@ import { JwtAccessTokenStrategy, JwtRefreshTokenStrategy, LocalStrategy } from "
       {
         name: User.name,
         schema: UserSchema,
+      },
+      {
+        name: ApiKey.name,
+        schema: ApiKeySchema,
       },
     ]),
     JwtModule.registerAsync({
@@ -33,7 +41,17 @@ import { JwtAccessTokenStrategy, JwtRefreshTokenStrategy, LocalStrategy } from "
       },
     }),
   ],
-  providers: [{ provide: HashingService, useClass: BcryptService }, AuthenticationService, AuthenticationCommonService, LocalStrategy, JwtAccessTokenStrategy, JwtRefreshTokenStrategy],
+  providers: [
+    { provide: HashingService, useClass: BcryptService },
+    AuthenticationService,
+    AuthenticationCommonService,
+    LocalStrategy,
+    JwtAccessTokenStrategy,
+    JwtRefreshTokenStrategy,
+    OtpAuthenticationService,
+    ApiKeyService,
+    UsersService,
+  ],
   controllers: [AuthenticationController],
   exports: [AuthenticationService, AuthenticationCommonService],
 })
