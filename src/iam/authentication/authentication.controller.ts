@@ -9,13 +9,14 @@ import { UsersService } from "src/users/users.service";
 import { OtpAuthenticationService } from "./otp-authentication.service";
 import { toFileStream } from "qrcode";
 import { JwtAuthAccessGuard } from "../guards/jwt-auth-access.guard";
+import { MaxAttemptsGuard } from "../guards/max-attempts.guard";
 
 @ApiTags("Auth")
 @Controller("authentication")
 export class AuthenticationController {
   constructor(private readonly authService: AuthenticationService, private readonly userService: UsersService, private readonly optAuthenticationService: OtpAuthenticationService) {}
 
-  @UseGuards(LocalAuthGuard)
+  @UseGuards(LocalAuthGuard, MaxAttemptsGuard)
   @Post("signin")
   async signIn(@Req() req: Request) {
     const user = req.user as User;

@@ -2,6 +2,7 @@ import { NestFactory } from "@nestjs/core";
 import { AppModule } from "./app.module";
 import { ValidationPipe } from "@nestjs/common";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
+import * as session from "express-session";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -16,6 +17,15 @@ async function bootstrap() {
       transformOptions: {
         enableImplicitConversion: true,
       },
+    }),
+  );
+
+  /** Inicializamos sesiones para controlar las peticiones al backend */
+  app.use(
+    session({
+      secret: process.env.SECRET_SESSION,
+      resave: false,
+      saveUninitialized: true,
     }),
   );
 
