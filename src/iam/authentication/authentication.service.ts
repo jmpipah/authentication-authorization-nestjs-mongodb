@@ -19,7 +19,7 @@ export class AuthenticationService {
         }
       }
       /** Data para generar el access y refresh Token */
-      const data: PayloadToken = { id: payload.id, role: payload.role };
+      const data: PayloadToken = { id: payload.id };
 
       const [accesstoken, refreshToken] = await Promise.all([this.authcommonService.generateJwtAccessToken(data), this.authcommonService.generateJwtRefreshoken(data)]);
 
@@ -37,7 +37,7 @@ export class AuthenticationService {
   async generateNewAccessToken(payload: SignInPayload, refreshToken: string) {
     try {
       /** Data para generar el access y refresh Token */
-      const data: PayloadToken = { id: payload.id, role: payload.role };
+      const data: PayloadToken = { id: payload.id };
 
       const accesstoken = await this.authcommonService.generateJwtAccessToken(data);
       const user = await this.authcommonService.findUserAutenticated(payload.id);

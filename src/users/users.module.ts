@@ -9,6 +9,7 @@ import { BcryptService } from "src/providers/hashing/bcrypt.service";
 import { ErrorsModule } from "src/errors/errors.module";
 import { ApiKeyService } from "src/api-key/api-key.service";
 import { ApiKey, ApiKeySchema } from "src/api-key/entities/api-key.entity";
+import { IamModule } from "src/iam/iam.module";
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { ApiKey, ApiKeySchema } from "src/api-key/entities/api-key.entity";
       { name: User.name, schema: UserSchema },
       { name: ApiKey.name, schema: ApiKeySchema },
     ]),
+    IamModule,
   ],
   controllers: [UsersController],
 

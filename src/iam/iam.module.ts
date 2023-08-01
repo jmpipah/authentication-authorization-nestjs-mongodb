@@ -14,6 +14,7 @@ import { OtpAuthenticationService } from "./authentication/otp-authentication.se
 import { UsersService } from "src/users/users.service";
 import { ApiKeyService } from "src/api-key/api-key.service";
 import { ApiKey, ApiKeySchema } from "src/api-key/entities/api-key.entity";
+import { UsersModule } from "src/users/users.module";
 
 @Module({
   imports: [

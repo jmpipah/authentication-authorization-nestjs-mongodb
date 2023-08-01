@@ -108,7 +108,9 @@ export class UsersService {
     try {
       const record = await this.findOne(id);
       /** Hasheamos la contraseña */
-      payload.password = await this.hashingService.hash(payload.password.trim());
+      if (payload.password) {
+        payload.password = await this.hashingService.hash(payload.password.trim());
+      }
       return await this.userModel.findByIdAndUpdate(record.id, { $set: payload }, { new: true, runValidators: true }).exec();
     } catch (error) {
       /** Creamos el error personalizado */

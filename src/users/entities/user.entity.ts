@@ -21,6 +21,9 @@ export class User extends Document {
   @Prop({ trim: true })
   tfaSecret: string;
 
+  @Prop({ default: "user", trim: true })
+  role: string;
+
   @Prop({ default: false })
   isDeleted: boolean;
 }

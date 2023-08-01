@@ -36,5 +36,9 @@ export class CreateUserDto {
 
   @IsOptional()
   @ApiProperty()
+  readonly role: string;
+
+  @IsOptional()
+  @ApiProperty()
   readonly isDeleted: boolean;
 }

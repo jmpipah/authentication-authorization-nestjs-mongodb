@@ -7,9 +7,12 @@ import { CreateUserDto, FilterUsersDto, UpdateUserDto } from "./dto";
 import { JwtAuthAccessGuard } from "src/iam/guards/jwt-auth-access.guard";
 import { IsPublic } from "src/iam/decorators/is-public.decorator";
 import { ApiKeyIsRequired } from "src/api-key/decorators/api-key.decorator";
+import { Role } from "src/iam/models/roles.model";
+import { Roles } from "src/iam/decorators";
+import { RolesGuard } from "src/iam/guards/roles.guard";
 
 @ApiTags("Users")
-@UseGuards(JwtAuthAccessGuard)
+@UseGuards(JwtAuthAccessGuard, RolesGuard)
 @Controller("users")
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
@@ -31,6 +34,8 @@ export class UsersController {
     return await this.usersService.findOne(id);
   }
 
+  // @IsPublic()
+  @Roles(Role.ADMIN)
   @Patch("update/:id")
   update(@Param("id", MongoIdPipe) id: string, @Body() payload: UpdateUserDto) {
     return this.usersService.update(id, payload);
