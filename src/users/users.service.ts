@@ -5,9 +5,9 @@ import { InjectModel } from "@nestjs/mongoose";
 import { User } from "./entities/user.entity";
 import { FilterQuery, Model } from "mongoose";
 import { FilterUsersDto } from "./dto/filter-user.dto";
-import { HashingService } from "src/providers/hashing/hashing.service";
-import { ErrorService } from "src/errors/error.service";
-import { ApiKeyService } from "src/api-key/api-key.service";
+import { HashingService } from "../providers/hashing/hashing.service";
+import { ErrorService } from "../errors/error.service";
+import { ApiKeyService } from "../api-key/api-key.service";
 
 @Injectable()
 export class UsersService {

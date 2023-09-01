@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { ApiKey } from "./entities/api-key.entity";
 import { Model } from "mongoose";
-import { HashingService } from "src/providers/hashing/hashing.service";
+import { HashingService } from "../providers/hashing/hashing.service";
 
 @Injectable()
 export class ApiKeyService {
